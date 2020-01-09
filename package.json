@@ -15,7 +15,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:hexAsciiConversion.commands.asciiToHex"
+    "onCommand:hexAsciiConversion.commands.asciiToHex",
+    "onCommand:hexAsciiConversion.commands.hexToAscii"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -23,6 +24,10 @@
       {
         "command": "hexAsciiConversion.commands.asciiToHex",
         "title": "Convert ASCII to Hex with optional delimiter string"
+      },
+      {
+        "command": "hexAsciiConversion.commands.hexToAscii",
+        "title": "Convert Hex to ASCII"
       }
     ],
     "configuration": [

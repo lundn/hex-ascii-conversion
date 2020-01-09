@@ -65,23 +65,31 @@ export function activate(context: vscode.ExtensionContext) {
 // this method is called when your extension is deactivated
 export function deactivate() {}
 
-const asciiToHex = (value: string, hexDelimiter: string = " ") => {
+export const asciiToHex = (
+  value: string,
+  hexDelimiter: string = ""
+): string => {
   const hexArray: string[] = [];
+  let asciiText = "";
+  if (isJson(value)) {
+    asciiText = JSON.stringify(JSON.parse(value));
+  } else {
+    asciiText = value.trim();
+  }
 
-  for (let n = 0, l = value.length; n < l; n++) {
-    const hexValue = Number(value.charCodeAt(n)).toString(16);
-    hexArray.push(hexValue?.trim?.());
+  for (let n = 0, l = asciiText.length; n < l; n++) {
+    const hexValue = Number(asciiText.charCodeAt(n)).toString(16);
+    hexArray.push(hexValue.trim());
   }
 
   return hexArray.join(hexDelimiter);
 };
 
-const hexToAscii = (value: string) => {
-  const purify = /[^a-z0-9]/;
+export const hexToAscii = (value: string): string => {
   const hexString = value
     .toString()
     .trim()
-    .replace(purify, "");
+    .replace(/[^a-z0-9]/g, "");
 
   let str = "";
 
@@ -90,4 +98,13 @@ const hexToAscii = (value: string) => {
   }
 
   return str;
+};
+
+const isJson = (str: string): boolean => {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
 };
