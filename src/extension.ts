@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand(
+  let asciiToHexCmd = vscode.commands.registerCommand(
     "hexAsciiConversion.commands.asciiToHex",
     () => {
       // The code you place here will be executed every time your command is executed
@@ -38,7 +38,28 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  context.subscriptions.push(disposable);
+  let hexToAsciiCmd = vscode.commands.registerCommand(
+    "hexAsciiConversion.commands.hexToAscii",
+    () => {
+      // Get the active text editor
+      let editor = vscode.window.activeTextEditor;
+
+      if (editor) {
+        let document = editor.document;
+        let selection = editor.selection;
+
+        // Get the word within the selection
+        let hex = document.getText(selection);
+        let ascii = hexToAscii(hex);
+        editor.edit(editBuilder => {
+          editBuilder.replace(selection, ascii);
+        });
+      }
+    }
+  );
+
+  context.subscriptions.push(asciiToHexCmd);
+  context.subscriptions.push(hexToAsciiCmd);
 }
 
 // this method is called when your extension is deactivated
@@ -49,8 +70,24 @@ const asciiToHex = (value: string, hexDelimiter: string = " ") => {
 
   for (let n = 0, l = value.length; n < l; n++) {
     const hexValue = Number(value.charCodeAt(n)).toString(16);
-    hexArray.push(hexValue);
+    hexArray.push(hexValue?.trim?.());
   }
 
   return hexArray.join(hexDelimiter);
+};
+
+const hexToAscii = (value: string) => {
+  const purify = /[^a-z0-9]/;
+  const hexString = value
+    .toString()
+    .trim()
+    .replace(purify, "");
+
+  let str = "";
+
+  for (let i = 0; i < hexString.length; i += 2) {
+    str += String.fromCharCode(parseInt(hexString.substr(i, 2), 16));
+  }
+
+  return str;
 };
