@@ -3,6 +3,11 @@
   "displayName": "HexAsciiConversion",
   "description": "Converter for Hex to ASCII text and ASCI text to Hex",
   "version": "0.0.1",
+  "publisher": "lundn",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lundn/hex-ascii-conversion.git"
+  },
   "engines": {
     "vscode": "^1.41.0"
   },
